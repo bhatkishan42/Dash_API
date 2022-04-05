@@ -1,4 +1,4 @@
-# Redoin the Database file in order to practice the use of the SQLite3 module
+# Redoing the Database file in order to practice the use of the SQLite3 module
 
 import pandas as pd
 import MySQLdb
@@ -34,9 +34,10 @@ class MedisageDB(object):
     def __exit__(self, exc_type, exc_value, traceback):
         self.conn.close()
 
-    def get_data(self,query):
+    def get_data(self, query):
         """
         Put a query inside and get the required data as per the need
+
         """
         df = pd.read_sql(query, self.conn)   # Reading the data from the database
         return df
@@ -45,7 +46,12 @@ class MedisageDB(object):
 if __name__ == "__main__":
 
     with MedisageDB(cred.DATABASE_USER, cred.DATABASE_PASSWORD) as db:
-        query = f"""SELECT * FROM live_events"""
+        query = f"""
+                select l.link_id,count(lm.mobile_number) as user from live_event_members lm
+                left join live_events l on lm.link_id = l.id
+                group by l.title
+                order by user desc
+                """
         df = db.get_data(query)
         print(df)
 
