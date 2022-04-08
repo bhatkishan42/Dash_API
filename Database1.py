@@ -28,7 +28,7 @@ class MedisageDB(object):
             return self
         except MySQLdb.Error:
             print("Could not connect to database. Please check Connectivity "
-                  "or Credential informations.")
+                  "or Credential information.")
             raise
 
     def __exit__(self, exc_type, exc_value, traceback):
